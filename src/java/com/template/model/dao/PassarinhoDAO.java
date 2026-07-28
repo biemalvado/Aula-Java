@@ -1,4 +1,7 @@
-package com.template;
+package com.template.model.dao;
+
+import com.template.ConexaoBD;
+import com.template.model.dto.PassarinhoDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +26,6 @@ public class PassarinhoDAO {
             return true;
 
         } catch (SQLException e) {
-            System.err.println("Erro ao cadastrar passarinho no banco: " + e.getMessage());
             return false;
         }
     }
@@ -47,7 +49,7 @@ public class PassarinhoDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao buscar passarinhos: " + e.getMessage());
+
         }
 
         return listaPassarinhos;
@@ -68,7 +70,6 @@ public class PassarinhoDAO {
             return linhasAfetadas > 0;
 
         } catch (SQLException e) {
-            System.err.println("Erro ao atualizar passarinho: " + e.getMessage());
             return false;
         }
     }
@@ -84,7 +85,6 @@ public class PassarinhoDAO {
             int linhasAfetadas = ps.executeUpdate();
             return linhasAfetadas > 0;
         } catch (SQLException e) {
-            System.err.println("Erro ao deletar passarinho: " + e.getMessage());
             return false;
         }
     }
