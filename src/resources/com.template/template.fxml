@@ -68,7 +68,7 @@
             </font>
         </Label>
 
-        <TableView fx:id="tblPassarinho" onMouseClicked="#selecionarPassarinho" prefHeight="200.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tblPassarinho" prefHeight="200.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colEspecie" prefWidth="300.0" text="Espécie" />
                 <TableColumn fx:id="colIdade" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Idade (anos)" />

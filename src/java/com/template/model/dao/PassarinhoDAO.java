@@ -9,8 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PassarinhoDAO {
+
+    // 1. Instanciando o Logger para esta classe
+    private static final Logger logger = Logger.getLogger(PassarinhoDAO.class.getName());
 
     public boolean cadastrar(PassarinhoDTO passarinho) {
         String sql = "INSERT INTO passarinho (especie, cativeiro, idade) VALUES (?, ?, ?)";
@@ -26,6 +31,8 @@ public class PassarinhoDAO {
             return true;
 
         } catch (SQLException e) {
+            // 2. Registrando o erro ao invés de apenas falhar silenciosamente
+            logger.log(Level.SEVERE, "Erro ao cadastrar o passarinho no banco de dados.", e);
             return false;
         }
     }
@@ -49,7 +56,8 @@ public class PassarinhoDAO {
             }
 
         } catch (SQLException e) {
-
+            // Registrando o erro
+            logger.log(Level.SEVERE, "Erro ao listar os passarinhos do banco de dados.", e);
         }
 
         return listaPassarinhos;
@@ -70,6 +78,8 @@ public class PassarinhoDAO {
             return linhasAfetadas > 0;
 
         } catch (SQLException e) {
+            // Registrando o erro
+            logger.log(Level.SEVERE, "Erro ao atualizar o passarinho de ID: " + passarinho.getId(), e);
             return false;
         }
     }
@@ -85,6 +95,8 @@ public class PassarinhoDAO {
             int linhasAfetadas = ps.executeUpdate();
             return linhasAfetadas > 0;
         } catch (SQLException e) {
+            // Registrando o erro
+            logger.log(Level.SEVERE, "Erro ao deletar o passarinho de ID: " + id, e);
             return false;
         }
     }
