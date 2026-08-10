@@ -16,21 +16,22 @@ public class PassarinhoService {
     }
 
     public void cadastrar(String especie, boolean cativeiro, int idade) {
-        // 1. Valida os dados (agora chamando o método atualizado do OCP)
+
         PassarinhoValidator.validarPassarinho(especie);
 
-        // 2. Monta o DTO
+
         PassarinhoDTO novoPassarinho = new PassarinhoDTO(especie, cativeiro, idade);
 
-        // 3. Salva no banco e checa se deu erro
+
         if (!dao.cadastrar(novoPassarinho)) {
             throw new RuntimeException("Falha ao cadastrar o passarinho no banco de dados.");
         }
     }
 
     public void atualizar(int id, String especie, boolean cativeiro, int idade) {
-        // 1. Valida os dados
+
         PassarinhoValidator.validarPassarinho(especie);
+
 
         PassarinhoDTO passarinho = new PassarinhoDTO(id, especie, cativeiro, idade);
 
