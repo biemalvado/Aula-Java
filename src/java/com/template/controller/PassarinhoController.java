@@ -113,9 +113,11 @@ public class PassarinhoController {
         }
     }
 
+    // ... rest of the controller remains the same ...
+
     private boolean isEntradaValida() {
         try {
-            PassarinhoValidator.validarPassarinho(txtEspecie.getText());
+            PassarinhoValidator.validarPassarinho(txtEspecie.getText(), spnIdade.getValue());
             return true;
         } catch (IllegalArgumentException e) {
             DialogUtil.mostrarErro("Validação", e.getMessage());
@@ -123,6 +125,8 @@ public class PassarinhoController {
             return false;
         }
     }
+
+    // ... rest of the controller remains the same ...
 
     private void finalizarAcao(String mensagem) {
 
