@@ -8,12 +8,15 @@ import java.util.List;
 
 public class PassarinhoValidator {
 
+    // O método principal fica muito mais limpo e fácil de ler
     public static void validarPassarinho(String especie, Integer idade) {
+        validarEspecie(especie);
+        validarIdade(idade);
+    }
 
-        // --- VALIDAÇÃO DA ESPÉCIE ---
+    // --- Método extraído para validação da espécie ---
+    private static void validarEspecie(String especie) {
         List<Validador<String>> validadoresString = new ArrayList<>();
-
-        // Adiciona o validador único que faz todas as checagens da espécie
         validadoresString.add(new EspecieValidador(especie));
 
         for (Validador<String> validador : validadoresString) {
@@ -21,11 +24,14 @@ public class PassarinhoValidator {
                 throw new IllegalArgumentException(validador.getMensagemErro());
             }
         }
+    }
 
-        // --- VALIDAÇÃO DA IDADE ---
+    // --- Método extraído para validação da idade ---
+    private static void validarIdade(Integer idade) {
         List<Validador<Integer>> validadoresInt = new ArrayList<>();
 
-        validadoresInt.add(new Validador<Integer>() {
+        // Aviso resolvido: Usando apenas <> em vez de <Integer>
+        validadoresInt.add(new Validador<>() {
             @Override
             public boolean validar(Integer valor) {
                 return valor != null && valor >= 0;
