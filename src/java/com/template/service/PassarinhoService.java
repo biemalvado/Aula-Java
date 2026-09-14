@@ -11,8 +11,8 @@ public class PassarinhoService
 
     private final InterfacePassarinhoDAO dao;
 
-    private final InterfacePassarinhoValidador passarinhoValidador;
-
+    private final InterfacePassarinhoValidador
+            passarinhoValidador;
 
     public PassarinhoService(
             InterfacePassarinhoDAO dao,
@@ -20,10 +20,10 @@ public class PassarinhoService
     ) {
 
         this.dao = dao;
+
         this.passarinhoValidador =
                 passarinhoValidador;
     }
-
 
     @Override
     public void cadastrar(
@@ -39,19 +39,20 @@ public class PassarinhoService
 
         PassarinhoDTO novoPassarinho =
                 new PassarinhoDTO(
-                        especie,
+                        especie.trim(),
                         cativeiro,
                         idade
                 );
 
-        if (!dao.cadastrar(novoPassarinho)) {
+        if (!dao.cadastrar(
+                novoPassarinho
+        )) {
 
             throw new RuntimeException(
                     "Falha ao cadastrar o passarinho no banco de dados."
             );
         }
     }
-
 
     @Override
     public void atualizar(
@@ -69,19 +70,20 @@ public class PassarinhoService
         PassarinhoDTO passarinho =
                 new PassarinhoDTO(
                         id,
-                        especie,
+                        especie.trim(),
                         cativeiro,
                         idade
                 );
 
-        if (!dao.atualizar(passarinho)) {
+        if (!dao.atualizar(
+                passarinho
+        )) {
 
             throw new RuntimeException(
                     "Falha ao atualizar o passarinho no banco de dados."
             );
         }
     }
-
 
     @Override
     public void deletar(int id) {
@@ -93,7 +95,6 @@ public class PassarinhoService
             );
         }
     }
-
 
     @Override
     public List<PassarinhoDTO> listarTodos() {

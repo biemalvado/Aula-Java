@@ -7,97 +7,203 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PassarinhoDAO
         implements InterfacePassarinhoDAO {
 
-    // 1. Instanciando o Logger para esta classe
-    private static final Logger logger = Logger.getLogger(PassarinhoDAO.class.getName());
+    private static final Logger logger =
+            Logger.getLogger(
+                    PassarinhoDAO.class.getName()
+            );
 
-    public boolean cadastrar(PassarinhoDTO passarinho) {
-        String sql = "INSERT INTO passarinho (especie, cativeiro, idade) VALUES (?, ?, ?)";
+    @Override
+    public boolean cadastrar(
+            PassarinhoDTO passarinho
+    ) {
 
-        try (Connection conn = ConexaoBD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql =
+                "INSERT INTO passarinho " +
+                        "(especie, cativeiro, idade) " +
+                        "VALUES (?, ?, ?)";
 
-            ps.setString(1, passarinho.getEspecie());
-            ps.setBoolean(2, passarinho.isCativeiro());
-            ps.setInt(3, passarinho.getIdade());
+        try (
+                Connection conn =
+                        ConexaoBD.conectar();
 
-            ps.execute();
-            return true;
+                PreparedStatement ps =
+                        conn.prepareStatement(sql)
+        ) {
+
+            ps.setString(
+                    1,
+                    passarinho.getEspecie()
+            );
+
+            ps.setBoolean(
+                    2,
+                    passarinho.isCativeiro()
+            );
+
+            ps.setInt(
+                    3,
+                    passarinho.getIdade()
+            );
+
+            int linhasAfetadas =
+                    ps.executeUpdate();
+
+            return linhasAfetadas > 0;
 
         } catch (SQLException e) {
-            // 2. Registrando o erro ao invés de apenas falhar silenciosamente
-            logger.log(Level.SEVERE, "Erro ao cadastrar o passarinho no banco de dados.", e);
+
+            logger.log(
+                    Level.SEVERE,
+                    "Erro ao cadastrar o passarinho.",
+                    e
+            );
+
             return false;
         }
     }
 
+    @Override
     public List<PassarinhoDTO> listarTodos() {
-        String sql = "SELECT * FROM passarinho";
-        List<PassarinhoDTO> listaPassarinhos = new ArrayList<>();
 
-        try (Connection conn = ConexaoBD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        String sql =
+                "SELECT * FROM passarinho ORDER BY id";
+
+        List<PassarinhoDTO> lista =
+                new ArrayList<>();
+
+        try (
+                Connection conn =
+                        ConexaoBD.conectar();
+
+                PreparedStatement ps =
+                        conn.prepareStatement(sql);
+
+                ResultSet rs =
+                        ps.executeQuery()
+        ) {
 
             while (rs.next()) {
-                PassarinhoDTO p = new PassarinhoDTO();
-                p.setId(rs.getInt("id"));
-                p.setEspecie(rs.getString("especie"));
-                p.setCativeiro(rs.getBoolean("cativeiro"));
-                p.setIdade(rs.getInt("idade"));
 
-                listaPassarinhos.add(p);
+                PassarinhoDTO passarinho =
+                        new PassarinhoDTO(
+                                rs.getInt("id"),
+                                rs.getString("especie"),
+                                rs.getBoolean("cativeiro"),
+                                rs.getInt("idade")
+                        );
+
+                lista.add(passarinho);
             }
 
         } catch (SQLException e) {
-            // Registrando o erro
-            logger.log(Level.SEVERE, "Erro ao listar os passarinhos do banco de dados.", e);
+
+            logger.log(
+                    Level.SEVERE,
+                    "Erro ao listar os passarinhos.",
+                    e
+            );
         }
 
-        return listaPassarinhos;
+        return lista;
     }
 
-    public boolean atualizar(PassarinhoDTO passarinho) {
-        String sql = "UPDATE passarinho SET especie = ?, cativeiro = ?, idade = ? WHERE id = ?";
+    @Override
+    public boolean atualizar(
+            PassarinhoDTO passarinho
+    ) {
 
-        try (Connection conn = ConexaoBD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql =
+                "UPDATE passarinho " +
+                        "SET especie = ?, " +
+                        "cativeiro = ?, idade = ? " +
+                        "WHERE id = ?";
 
-            ps.setString(1, passarinho.getEspecie());
-            ps.setBoolean(2, passarinho.isCativeiro());
-            ps.setInt(3, passarinho.getIdade());
-            ps.setInt(4, passarinho.getId());
+        try (
+                Connection conn =
+                        ConexaoBD.conectar();
 
-            int linhasAfetadas = ps.executeUpdate();
+                PreparedStatement ps =
+                        conn.prepareStatement(sql)
+        ) {
+
+            ps.setString(
+                    1,
+                    passarinho.getEspecie()
+            );
+
+            ps.setBoolean(
+                    2,
+                    passarinho.isCativeiro()
+            );
+
+            ps.setInt(
+                    3,
+                    passarinho.getIdade()
+            );
+
+            ps.setInt(
+                    4,
+                    passarinho.getId()
+            );
+
+            int linhasAfetadas =
+                    ps.executeUpdate();
+
             return linhasAfetadas > 0;
 
         } catch (SQLException e) {
-            // Registrando o erro
-            logger.log(Level.SEVERE, "Erro ao atualizar o passarinho de ID: " + passarinho.getId(), e);
+
+            logger.log(
+                    Level.SEVERE,
+                    "Erro ao atualizar o passarinho de ID: "
+                            + passarinho.getId(),
+                    e
+            );
+
             return false;
         }
     }
 
+    @Override
     public boolean deletar(int id) {
-        String sql = "DELETE FROM passarinho WHERE id = ?";
 
-        try (Connection conn = ConexaoBD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql =
+                "DELETE FROM passarinho WHERE id = ?";
+
+        try (
+                Connection conn =
+                        ConexaoBD.conectar();
+
+                PreparedStatement ps =
+                        conn.prepareStatement(sql)
+        ) {
 
             ps.setInt(1, id);
 
-            int linhasAfetadas = ps.executeUpdate();
+            int linhasAfetadas =
+                    ps.executeUpdate();
+
             return linhasAfetadas > 0;
+
         } catch (SQLException e) {
-            // Registrando o erro
-            logger.log(Level.SEVERE, "Erro ao deletar o passarinho de ID: " + id, e);
+
+            logger.log(
+                    Level.SEVERE,
+                    "Erro ao deletar o passarinho de ID: "
+                            + id,
+                    e
+            );
+
             return false;
         }
     }

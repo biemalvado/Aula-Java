@@ -7,7 +7,16 @@ import com.template.util.Servicos;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class PassarinhoController {
@@ -40,24 +49,28 @@ public class PassarinhoController {
     private TableView<PassarinhoDTO> tblPassarinho;
 
     @FXML
-    private TableColumn<PassarinhoDTO, String> colEspecie;
+    private TableColumn<PassarinhoDTO, String>
+            colEspecie;
 
     @FXML
-    private TableColumn<PassarinhoDTO, Boolean> colCativeiro;
+    private TableColumn<PassarinhoDTO, Boolean>
+            colCativeiro;
 
     @FXML
-    private TableColumn<PassarinhoDTO, Integer> colIdade;
+    private TableColumn<PassarinhoDTO, Integer>
+            colIdade;
 
 
-    // O Controller depende da interface, não da implementação concreta
-    private final InterfacePassarinhoService passarinhoService;
+    private final InterfacePassarinhoService
+            passarinhoService;
 
 
-    // O Service será injetado pelo Main
     public PassarinhoController(
             InterfacePassarinhoService passarinhoService
     ) {
-        this.passarinhoService = passarinhoService;
+
+        this.passarinhoService =
+                passarinhoService;
     }
 
 
@@ -65,19 +78,26 @@ public class PassarinhoController {
     private void initialize() {
 
         colEspecie.setCellValueFactory(
-                new PropertyValueFactory<>("especie")
+                new PropertyValueFactory<>(
+                        "especie"
+                )
         );
 
         colCativeiro.setCellValueFactory(
-                new PropertyValueFactory<>("cativeiro")
+                new PropertyValueFactory<>(
+                        "cativeiro"
+                )
         );
 
         colIdade.setCellValueFactory(
-                new PropertyValueFactory<>("idade")
+                new PropertyValueFactory<>(
+                        "idade"
+                )
         );
 
         spnIdade.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                new SpinnerValueFactory
+                        .IntegerSpinnerValueFactory(
                         0,
                         150,
                         0
@@ -97,19 +117,23 @@ public class PassarinhoController {
                         .getSelectionModel()
                         .selectedItemProperty();
 
-
         btnCadastrar
                 .disableProperty()
-                .bind(selecao.isNotNull());
+                .bind(
+                        selecao.isNotNull()
+                );
 
         btnAtualizar
                 .disableProperty()
-                .bind(selecao.isNull());
+                .bind(
+                        selecao.isNull()
+                );
 
         btnExcluir
                 .disableProperty()
-                .bind(selecao.isNull());
-
+                .bind(
+                        selecao.isNull()
+                );
 
         selecao.addListener(
                 (obs, oldVal, newVal) -> {
@@ -154,12 +178,7 @@ public class PassarinhoController {
 
         } catch (IllegalArgumentException e) {
 
-            DialogUtil.mostrarErro(
-                    "Validação",
-                    e.getMessage()
-            );
-
-            txtEspecie.requestFocus();
+            mostrarErroValidacao(e);
 
         } catch (Exception e) {
 
@@ -198,12 +217,7 @@ public class PassarinhoController {
 
         } catch (IllegalArgumentException e) {
 
-            DialogUtil.mostrarErro(
-                    "Validação",
-                    e.getMessage()
-            );
-
-            txtEspecie.requestFocus();
+            mostrarErroValidacao(e);
 
         } catch (Exception e) {
 
@@ -293,7 +307,22 @@ public class PassarinhoController {
     }
 
 
-    private void finalizarAcao(String mensagem) {
+    private void mostrarErroValidacao(
+            IllegalArgumentException e
+    ) {
+
+        DialogUtil.mostrarErro(
+                "Validação",
+                e.getMessage()
+        );
+
+        txtEspecie.requestFocus();
+    }
+
+
+    private void finalizarAcao(
+            String mensagem
+    ) {
 
         Servicos.limparCampos(
                 txtEspecie,

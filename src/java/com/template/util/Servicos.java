@@ -8,19 +8,44 @@ import javafx.scene.control.TextField;
 
 public class Servicos {
 
+    private Servicos() {
+    }
 
-    public static void limparCampos(TextField txtEspecie, CheckBox chkCativeiro,
-                                    Spinner<Integer> spnIdade, TableView<?> tblPassarinho) {
+    public static void limparCampos(
+            TextField txtEspecie,
+            CheckBox chkCativeiro,
+            Spinner<Integer> spnIdade,
+            TableView<?> tblPassarinho
+    ) {
+
         txtEspecie.clear();
-        chkCativeiro.setSelected(false);
-        spnIdade.getValueFactory().setValue(0);
-        tblPassarinho.getSelectionModel().clearSelection();
+
+        chkCativeiro.setSelected(
+                false
+        );
+
+        spnIdade
+                .getValueFactory()
+                .setValue(0);
+
+        tblPassarinho
+                .getSelectionModel()
+                .clearSelection();
+
         txtEspecie.requestFocus();
     }
 
+    public static void mostrarMensagemSucesso(
+            Label lblMensagem,
+            String mensagem
+    ) {
 
-    public static void mostrarMensagemSucesso(Label lblMensagem, String mensagem) {
-        lblMensagem.setText(mensagem);
-        lblMensagem.setStyle("-fx-text-fill: #2e7d32;");
+        lblMensagem.setText(
+                mensagem
+        );
+
+        lblMensagem.setStyle(
+                "-fx-text-fill: #2e7d32;"
+        );
     }
 }

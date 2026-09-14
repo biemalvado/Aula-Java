@@ -1,10 +1,11 @@
 package com.template.util;
 
+import com.template.validator.CampoObrigatorioValidador;
 import com.template.validator.EspecieValidador;
+import com.template.validator.IdadeValidador;
 import com.template.validator.InterfacePassarinhoValidador;
 import com.template.validator.Validador;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PassarinhoValidator
@@ -23,31 +24,45 @@ public class PassarinhoValidator
     private void validarEspecie(String especie) {
 
         List<Validador<String>> validadores =
-                new ArrayList<>();
+                List.of(
+                        new CampoObrigatorioValidador(
+                                "Espécie",
+                                especie
+                        ),
+                        new EspecieValidador(
+                                especie
+                        )
+                );
 
-        validadores.add(
-                new EspecieValidador(especie)
-        );
+        executarValidadores(validadores);
+    }
 
-        for (Validador<String> validador : validadores) {
+    private void validarIdade(Integer idade) {
+
+        List<Validador<Integer>> validadores =
+                List.of(
+                        new IdadeValidador(
+                                idade
+                        )
+                );
+
+        executarValidadores(validadores);
+    }
+
+    private <T> void executarValidadores(
+            List<Validador<T>> validadores
+    ) {
+
+        for (Validador<T> validador : validadores) {
 
             if (!validador.validar(
-                    validador.getValor())) {
+                    validador.getValor()
+            )) {
 
                 throw new IllegalArgumentException(
                         validador.getMensagemErro()
                 );
             }
-        }
-    }
-
-    private void validarIdade(Integer idade) {
-
-        if (idade == null || idade < 0) {
-
-            throw new IllegalArgumentException(
-                    "O campo 'Idade (anos)' deve ser maior ou igual a zero."
-            );
         }
     }
 }
