@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PassarinhoDAO {
+public class PassarinhoDAO
+        implements InterfacePassarinhoDAO {
 
     // 1. Instanciando o Logger para esta classe
     private static final Logger logger = Logger.getLogger(PassarinhoDAO.class.getName());

@@ -1,57 +1,53 @@
 package com.template.util;
 
 import com.template.validator.EspecieValidador;
+import com.template.validator.InterfacePassarinhoValidador;
 import com.template.validator.Validador;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PassarinhoValidator {
+public class PassarinhoValidator
+        implements InterfacePassarinhoValidador {
 
-    // O método principal fica muito mais limpo e fácil de ler
-    public static void validarPassarinho(String especie, Integer idade) {
+    @Override
+    public void validarPassarinho(
+            String especie,
+            Integer idade
+    ) {
+
         validarEspecie(especie);
         validarIdade(idade);
     }
 
-    // --- Método extraído para validação da espécie ---
-    private static void validarEspecie(String especie) {
-        List<Validador<String>> validadoresString = new ArrayList<>();
-        validadoresString.add(new EspecieValidador(especie));
+    private void validarEspecie(String especie) {
 
-        for (Validador<String> validador : validadoresString) {
-            if (!validador.validar(validador.getValor())) {
-                throw new IllegalArgumentException(validador.getMensagemErro());
+        List<Validador<String>> validadores =
+                new ArrayList<>();
+
+        validadores.add(
+                new EspecieValidador(especie)
+        );
+
+        for (Validador<String> validador : validadores) {
+
+            if (!validador.validar(
+                    validador.getValor())) {
+
+                throw new IllegalArgumentException(
+                        validador.getMensagemErro()
+                );
             }
         }
     }
 
-    // --- Método extraído para validação da idade ---
-    private static void validarIdade(Integer idade) {
-        List<Validador<Integer>> validadoresInt = new ArrayList<>();
+    private void validarIdade(Integer idade) {
 
-        // Aviso resolvido: Usando apenas <> em vez de <Integer>
-        validadoresInt.add(new Validador<>() {
-            @Override
-            public boolean validar(Integer valor) {
-                return valor != null && valor >= 0;
-            }
+        if (idade == null || idade < 0) {
 
-            @Override
-            public String getMensagemErro() {
-                return "O campo 'Idade (anos)' deve ser um número maior ou igual a zero.";
-            }
-
-            @Override
-            public Integer getValor() {
-                return idade;
-            }
-        });
-
-        for (Validador<Integer> validador : validadoresInt) {
-            if (!validador.validar(validador.getValor())) {
-                throw new IllegalArgumentException(validador.getMensagemErro());
-            }
+            throw new IllegalArgumentException(
+                    "O campo 'Idade (anos)' deve ser maior ou igual a zero."
+            );
         }
     }
 }
