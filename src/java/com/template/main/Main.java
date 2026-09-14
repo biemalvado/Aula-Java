@@ -18,34 +18,30 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage)
-            throws IOException {
+    public void start(Stage primaryStage) throws Exception {
 
-
-        // ==============================
-        // DAO
-        // ==============================
+        // ==========================================
+        // 1 - CRIA O DAO
+        // ==========================================
 
         InterfacePassarinhoDAO dao =
                 new PassarinhoDAO();
 
 
-        // ==============================
-        // VALIDATOR
-        // ==============================
+        // ==========================================
+        // 2 - CRIA O VALIDADOR
+        // ==========================================
 
         InterfacePassarinhoValidador validador =
                 new PassarinhoValidator();
 
 
-        // ==============================
-        // SERVICE
-        // ==============================
+        // ==========================================
+        // 3 - CRIA O SERVICE
+        // ==========================================
 
         InterfacePassarinhoService service =
                 new PassarinhoService(
@@ -54,61 +50,67 @@ public class Main extends Application {
                 );
 
 
-        // ==============================
-        // FXML
-        // ==============================
+        // ==========================================
+        // 4 - CARREGA O FXML
+        // ==========================================
 
         FXMLLoader loader =
                 new FXMLLoader(
-                        Main.class.getResource(
-                                "/com/template/template.fxml"
+                        getClass().getResource(
+                                "/com.template/template.fxml"
                         )
                 );
 
 
-        // ==============================
-        // INJEÇÃO DO CONTROLLER
-        // ==============================
+        // ==========================================
+        // 5 - INJEÇÃO DE DEPENDÊNCIA NO CONTROLLER
+        // ==========================================
 
-        loader.setControllerFactory(
-                tipo -> {
+        loader.setControllerFactory(controllerClass -> {
 
-                    if (tipo ==
-                            PassarinhoController.class) {
+            if (controllerClass == PassarinhoController.class) {
 
-                        return new PassarinhoController(
-                                service
-                        );
-                    }
+                return new PassarinhoController(
+                        service
+                );
+            }
 
-                    try {
+            try {
 
-                        return tipo
-                                .getDeclaredConstructor()
-                                .newInstance();
+                return controllerClass
+                        .getDeclaredConstructor()
+                        .newInstance();
 
-                    } catch (Exception e) {
+            } catch (Exception e) {
 
-                        throw new RuntimeException(e);
-                    }
-                }
-        );
+                throw new RuntimeException(
+                        "Erro ao criar o Controller.",
+                        e
+                );
+            }
+        });
 
+
+        // ==========================================
+        // 6 - CARREGA A INTERFACE
+        // ==========================================
 
         Parent root = loader.load();
 
 
-        Scene scene =
-                new Scene(root);
+        // ==========================================
+        // 7 - CONFIGURA A JANELA
+        // ==========================================
 
+        Scene scene = new Scene(root);
 
-        stage.setTitle(
-                "Cadastro de Passarinhos"
+        primaryStage.setTitle(
+                "CRUD de Passarinhos"
         );
 
-        stage.setScene(scene);
+        primaryStage.setScene(scene);
 
-        stage.show();
+        primaryStage.show();
     }
 
 
